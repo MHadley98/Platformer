@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Extra using statment to allow us to use the scene management functions
+using UnityEngine.SceneManagement;
+
 public class Player : MonoBehaviour
 {
 
@@ -75,6 +78,20 @@ public class Player : MonoBehaviour
             //give the velocity to the rigid body
             physicsBody.velocity = velocity;
         }
+
+    }
+
+    //our own function for handling player death
+    public void Kill()
+    {
+        //reset the current level to restart from beginning
+
+        //forst ask unity what the current level is
+        Scene currentLevel = SceneManager.GetActiveScene();
+
+        //second tell Unity to load current level again
+        //by passing the build index of our level
+        SceneManager.LoadScene(currentLevel.buildIndex);
 
     }
 
