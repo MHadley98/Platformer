@@ -7,11 +7,14 @@ public class Player : MonoBehaviour
 
     //designer variables
     public float speed = 10;
+    public float jumpSpeed = 10;
     public Rigidbody2D physicsBody;
     public string horizontalAxis = "Horizontal";
+    public string jumpButton = "Jump";
 
     public Animator playerAnimator;
     public SpriteRenderer playerSprite;
+    public Collider2D playerCollider;
 
     // Use this for initialization
     void Start()
@@ -39,18 +42,38 @@ public class Player : MonoBehaviour
         //give the velocity to the rigid body
         physicsBody.velocity = velocity;
 
+
         //tell animator our speed
         playerAnimator.SetFloat("walkSpeed", Mathf.Abs(velocity.x));
 
         //flip sprite if moving backwards
 
-    if (velocity.x<0)
+        if (velocity.x<0)
+            {
+                playerSprite.flipX = true;
+            }
+            else
+            {
+                playerSprite.flipX = false;
+            }
+
+        //Jumpuing
+
+        //detect if touching ground
+        //Get the LayerMask from Unity using the name of the layer
+        LayerMask groundLayerMask = LayerMask.GetMask("Ground");
+        //Ask the player's collider if we are touching the LayerMask
+        bool touchingGround = playerCollider.IsTouchingLayers(groundLayerMask);
+
+        bool jumpButtonPressed = Input.GetButtonDown(jumpButton);
+        if (jumpButtonPressed == true && touchingGround == true)
         {
-            playerSprite.flipX = true;
-        }
-        else
-        {
-            playerSprite.flipX = false;
+            //We have pressed jump so we should set 
+            //our upward velocity to our jump speed
+            velocity.y = jumpSpeed;
+
+            //give the velocity to the rigid body
+            physicsBody.velocity = velocity;
         }
 
     }
